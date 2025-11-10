@@ -36,10 +36,19 @@ fn process_line(my_map: &mut HashMap<String, u32>, line: &str) {
     }
 
     for part in line.split_whitespace() {
-        let tmp = part.to_lowercase();
+        let cleaned_word: String = part
+            .chars()
+            .filter(|c| c.is_alphanumeric() || *c != '\'')
+            .flat_map(|c| c.to_lowercase())
+            .collect();
+
+        if cleaned_word.is_empty() {
+            continue;
+        }
+
         my_map
-            .entry(tmp)
-            .and_modify(|counter| *counter +=1)
+            .entry(cleaned_word)
+            .and_modify(|count| *count += 1)
             .or_insert(1);
     }
 }
