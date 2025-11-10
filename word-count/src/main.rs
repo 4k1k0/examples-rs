@@ -4,19 +4,22 @@ use std::io::{self, BufRead};
 use std::path::Path;
 
 fn main() {
-    process_file("./book.txt");
+    if let Err(e) = process_file("./book.txt") {
+        eprintln!("error while processing file {}", e)
+    }
 }
 
-fn process_file(filename: &str) {
+fn process_file(filename: &str) -> io::Result<()> {
     let mut my_map = HashMap::<String, u32>::new();
 
-    if let Ok(lines) = read_lines(filename) {
-        for line in lines.map_while(Result::ok) {
-            process_line(&mut my_map, line);
-        }
+    let lines = read_lines(filename)?;
+    for line in lines.flatten() {
+        process_line(&mut my_map, &line);
     }
 
     println!("my map: {:?}", my_map);
+
+    Ok(())
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
@@ -27,17 +30,16 @@ where
     Ok(io::BufReader::new(file).lines())
 }
 
-fn process_line(my_map: &mut HashMap<String, u32>, line: String) {
-    if line == "" {
+fn process_line(my_map: &mut HashMap<String, u32>, line: &str) {
+    if line.trim().is_empty() {
         return;
     }
 
-    for part in line.split(" ") {
+    for part in line.split_whitespace() {
         let tmp = part.to_lowercase();
-        if let Some(x) = my_map.get_mut(&tmp) {
-            *x = *x + 1;
-        } else {
-            my_map.insert(String::from(&tmp), 1);
-        }
+        my_map
+            .entry(tmp)
+            .and_modify(|counter| *counter +=1)
+            .or_insert(1);
     }
 }
