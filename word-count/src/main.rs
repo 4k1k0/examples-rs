@@ -1,54 +1,8 @@
-use std::collections::HashMap;
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::Path;
+mod files;
 
 fn main() {
-    if let Err(e) = process_file("./book.txt") {
+    if let Err(e) = files::process_file("./book.txt") {
         eprintln!("error while processing file {}", e)
     }
 }
 
-fn process_file(filename: &str) -> io::Result<()> {
-    let mut my_map = HashMap::<String, u32>::new();
-
-    let lines = read_lines(filename)?;
-    for line in lines.flatten() {
-        process_line(&mut my_map, &line);
-    }
-
-    println!("my map: {:?}", my_map);
-
-    Ok(())
-}
-
-fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
-where
-    P: AsRef<Path>,
-{
-    let file = File::open(filename)?;
-    Ok(io::BufReader::new(file).lines())
-}
-
-fn process_line(my_map: &mut HashMap<String, u32>, line: &str) {
-    if line.trim().is_empty() {
-        return;
-    }
-
-    for part in line.split_whitespace() {
-        let cleaned_word: String = part
-            .chars()
-            .filter(|c| c.is_alphanumeric() || *c != '\'')
-            .flat_map(|c| c.to_lowercase())
-            .collect();
-
-        if cleaned_word.is_empty() {
-            continue;
-        }
-
-        my_map
-            .entry(cleaned_word)
-            .and_modify(|count| *count += 1)
-            .or_insert(1);
-    }
-}
