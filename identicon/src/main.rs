@@ -1,3 +1,5 @@
+mod identicon;
+
 fn main() {
-    println!("Hello, world!");
+    identicon::run();
 }
