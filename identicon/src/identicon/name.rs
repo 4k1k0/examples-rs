@@ -1,26 +1,25 @@
-use crate::identicon::color::{Color, new};
+use crate::identicon::{color::{Color, new}, file::generate_filename};
 
 #[derive(Debug)]
 pub struct Icon {
     username: String,
-    hash: [u8; 16],
+    pub hash: [u8; 16],
     color: Color,
+    filename: String,
 }
 
 pub fn new_icon(username: &str) -> Icon {
-    let hash = get_hash(username);
+    let hash = md5::compute(username).0;
     let color = new(hash);
     let username = username.to_string();
+    let filename = generate_filename(hash);
 
     Icon {
         username,
         hash,
         color,
+        filename,
     }
-}
-
-pub fn get_hash(username: &str) -> [u8; 16] {
-    md5::compute(username).0
 }
 
 impl Icon {
@@ -28,6 +27,7 @@ impl Icon {
         println!("{:?}", self.hash);
         println!("{:?}", self.color);
         println!("{:?}", self.username);
+        println!("{:?}", self.filename);
 
         self.color.info();
     }
