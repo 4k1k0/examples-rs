@@ -4,9 +4,8 @@ mod draw;
 pub mod color;
 pub mod name;
 
-pub fn run() {
-    let icon = new_icon("wako");
-    println!("{:?}",icon);
-    name::foo(icon);
+pub fn run(s: &str) {
+    let icon = new_icon(s);
+    icon.info();
     draw::draw();
 }

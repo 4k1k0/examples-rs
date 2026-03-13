@@ -1,5 +1,5 @@
 mod identicon;
 
 fn main() {
-    identicon::run();
+    identicon::run("wako");
 }

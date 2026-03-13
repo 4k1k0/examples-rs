@@ -13,6 +13,8 @@ pub fn new(hash: [u8; 16]) -> Color {
     }
 }
 
-pub fn foo(c: Color){
-    println!("{}, {}, {}", c.r, c.g, c.b)
+impl Color {
+    pub fn info(&self) {
+        println!("R:{} | G:{} | B:{}", self.r, &self.g, &self.b)
+    }
 }

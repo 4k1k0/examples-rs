@@ -1,4 +1,4 @@
-use crate::identicon::color::{self, Color, new};
+use crate::identicon::color::{Color, new};
 
 #[derive(Debug)]
 pub struct Icon {
@@ -23,10 +23,12 @@ pub fn get_hash(username: &str) -> [u8; 16] {
     md5::compute(username).0
 }
 
-pub fn foo(i: Icon) {
-    println!("{:?}", i.hash);
-    println!("{:?}", i.color);
-    println!("{:?}", i.username);
+impl Icon {
+    pub fn info(&self) {
+        println!("{:?}", self.hash);
+        println!("{:?}", self.color);
+        println!("{:?}", self.username);
 
-    color::foo(i.color);
+        self.color.info();
+    }
 }
