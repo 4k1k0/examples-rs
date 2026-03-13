@@ -5,7 +5,7 @@ pub fn generate_filename(hash: [u8; 16]) -> String {
 
     builder.append("/tmp/");
 
-    for h in hash{
+    for h in hash {
         let tmp = format!("{}", h);
         builder.append(tmp)
     }

@@ -1,8 +1,9 @@
+mod draw;
 mod file;
 mod name;
-mod draw;
 
 pub mod color;
+pub mod grid;
 
 pub fn run(s: &str) {
     let icon = name::new_icon(s);
