@@ -10,7 +10,7 @@ pub fn generate_filename(hash: [u8; 16]) -> String {
         builder.append(tmp)
     }
 
-    builder.append(".jpg");
+    builder.append(".png");
 
     builder.string().unwrap()
 }

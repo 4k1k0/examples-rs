@@ -1,7 +1,7 @@
 mod identicon;
 
 fn main() {
-    match identicon::run("shushu") {
+    match identicon::run("wako") {
         Ok(_) => {
             println!("sucess");
         }

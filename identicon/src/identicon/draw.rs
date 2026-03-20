@@ -2,7 +2,8 @@ use crate::identicon::{color, pixel};
 use image::{ImageBuffer, Rgb, RgbImage};
 
 pub fn new(color: &color::Color, pixel_map: &Vec<pixel::PixelMap>) -> RgbImage {
-    let mut img: RgbImage = ImageBuffer::new(250, 250);
+    let mut img = ImageBuffer::<Rgb<u8>, Vec<u8>>::from_pixel(250, 250, Rgb([255, 255, 255]));
+
     let pixel = Rgb([color.r, color.g, color.b]);
 
     for (point_a, point_b) in pixel_map {

@@ -40,13 +40,19 @@ pub fn new_icon(username: &str) -> Icon {
 impl Icon {
     pub fn info(&self) {
         println!("{:?}", self.hex);
+        println!("----------------------------------------");
         println!("{:?}", self.color);
+        println!("----------------------------------------");
         println!("{:?}", self.username);
+        println!("----------------------------------------");
         println!("{:?}", self.filename);
+        println!("----------------------------------------");
         println!("grid: {:?}", self.grid);
+        println!("----------------------------------------");
         println!("pixel_map: {:?}", self.pixel_map);
-
+        println!("----------------------------------------");
         self.color.info();
+        println!("----------------------------------------");
     }
 
     pub fn save(&self) -> Result<(), image::ImageError> {
