@@ -1,5 +1,13 @@
 mod identicon;
 
 fn main() {
-    identicon::run("wako");
+    match identicon::run("shushu") {
+        Ok(_) => {
+            println!("sucess");
+        },
+        Err(e) => {
+            panic!("error: {}", e)
+        }
+        
+    }
 }

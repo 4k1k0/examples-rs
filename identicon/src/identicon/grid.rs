@@ -38,7 +38,6 @@ fn list_flaten(rows: [[u8; 5]; 5]) -> [u8; 25] {
     res
 }
 
-
 fn with_index(list: [u8; 25]) -> [Point; 25] {
     let mut points: [Point; 25] = [(0, 0); 25];
     for (i, &element) in list.iter().enumerate() {
@@ -48,7 +47,6 @@ fn with_index(list: [u8; 25]) -> [Point; 25] {
     points
 }
 
-fn filter_even_points(points: [Point;25])  -> Vec<Point> {
-    points.into_iter().filter(|(a, _b)| a %2 == 0).collect()
+fn filter_even_points(points: [Point; 25]) -> Vec<Point> {
+    points.into_iter().filter(|(a, _b)| a % 2 == 0).collect()
 }
-

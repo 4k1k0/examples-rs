@@ -1,16 +1,20 @@
 use crate::identicon::color;
+use crate::identicon::draw;
 use crate::identicon::file;
 use crate::identicon::grid;
 use crate::identicon::pixel;
+
+use image::RgbImage;
 
 #[derive(Debug)]
 pub struct Icon {
     username: String,
     hex: [u8; 16],
-    color: color::Color,
+    pub color: color::Color,
     filename: String,
     grid: Vec<grid::Point>,
-    pixel_map: Vec<pixel::PixelMap>,
+    pub pixel_map: Vec<pixel::PixelMap>,
+    image: RgbImage,
 }
 
 pub fn new_icon(username: &str) -> Icon {
@@ -20,6 +24,7 @@ pub fn new_icon(username: &str) -> Icon {
     let filename = file::generate_filename(hex);
     let grid = grid::new(hex);
     let pixel_map = pixel::new(&grid);
+    let image = draw::new(&color, &pixel_map);
 
     Icon {
         username,
@@ -28,6 +33,7 @@ pub fn new_icon(username: &str) -> Icon {
         filename,
         grid,
         pixel_map,
+        image,
     }
 }
 
@@ -41,5 +47,9 @@ impl Icon {
         println!("pixel_map: {:?}", self.pixel_map);
 
         self.color.info();
+    }
+
+    pub fn save(&self) -> Result<(), image::ImageError> {
+        self.image.save(&self.filename)
     }
 }
