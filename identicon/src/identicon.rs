@@ -1,6 +1,7 @@
 mod draw;
 mod file;
 mod name;
+mod pixel;
 
 pub mod color;
 pub mod grid;

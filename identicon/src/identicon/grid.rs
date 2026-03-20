@@ -1,7 +1,11 @@
-pub fn new(hex: [u8; 16]) -> [Point;25] {
+pub type Point = (u8, usize);
+
+pub fn new(hex: [u8; 16]) -> Vec<Point> {
     let tmp_new_split = split(hex).map(mirror_row);
-    let x = list_flaten(tmp_new_split);
-    with_index(x)
+    let tmp_flaten = list_flaten(tmp_new_split);
+    let tmp_index = with_index(tmp_flaten);
+
+    filter_even_points(tmp_index)
 }
 
 fn split(hex: [u8; 16]) -> [[u8; 3]; 5] {
@@ -34,7 +38,6 @@ fn list_flaten(rows: [[u8; 5]; 5]) -> [u8; 25] {
     res
 }
 
-pub type Point = (u8, usize);
 
 fn with_index(list: [u8; 25]) -> [Point; 25] {
     let mut points: [Point; 25] = [(0, 0); 25];
@@ -49,18 +52,3 @@ fn filter_even_points(points: [Point;25])  -> Vec<Point> {
     points.into_iter().filter(|(a, _b)| a %2 == 0).collect()
 }
 
-fn build_pixel_map(points: Vec<Point>) -> Vec<PixelMap> {
-    points.iter().map(new_pixel_map).collect()
-}
-
-type Foo = (usize, usize);
-
-type PixelMap = (Foo, Foo);
-
-fn new_pixel_map((_x, index): &Point) -> PixelMap {
-    let horizontal = (index %5) * 50;
-    let vertical = (index /5) * 50;
-    let top_left: Foo = (horizontal, vertical);
-    let bottom_right: Foo = (horizontal + 50, vertical + 50);
-    (top_left, bottom_right)
-}
