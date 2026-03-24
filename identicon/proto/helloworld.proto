@@ -1,0 +1,14 @@
+syntax = "proto3";
+package server;
+
+service Identiconer {
+    rpc Create (IdenticonRequest) returns (IdenticonReply);
+}
+
+message IdenticonRequest {
+    string username = 1;
+}
+
+message IdenticonReply {
+    string path = 1;
+}
