@@ -3,10 +3,6 @@ name = "identicon"
 version = "0.1.0"
 edition = "2024"
 
-[[bin]] # Bin to run the HelloWorld gRPC server
-name = "identicon-server"
-path = "src/server.rs"
-
 [dependencies]
 md5 = "0.8.0"
 image = "0.25.10"
