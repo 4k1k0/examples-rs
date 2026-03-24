@@ -1,11 +1,13 @@
 use tonic::{Request, Response, Status, transport::Server};
 
-use identicon::identiconer_server::{Identiconer, IdenticonerServer};
-use identicon::{IdenticonReply, IdenticonRequest};
+use identiconpro::identiconer_server::{Identiconer, IdenticonerServer};
+use identiconpro::{IdenticonReply, IdenticonRequest};
 
-pub mod identicon {
+pub mod identiconpro {
     tonic::include_proto!("identicon");
 }
+
+mod identicon;
 
 #[derive(Debug, Default)]
 pub struct MyIdenticoner {}
@@ -18,9 +20,14 @@ impl Identiconer for MyIdenticoner {
     ) -> Result<Response<IdenticonReply>, Status> {
         println!("request: {:?}", request);
 
-        Ok(Response::new(IdenticonReply {
-            path: "path fake".to_string(),
-        }))
+        let path = match identicon::run(&request.get_ref().username) {
+            Ok(_) => "good".to_string(),
+            Err(e) => e.to_string(),
+        };
+
+        let res = IdenticonReply{ path };
+
+        Ok(Response::new(res))
     }
 }
 
