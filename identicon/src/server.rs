@@ -4,7 +4,7 @@ use identiconpro::identiconer_server::{Identiconer, IdenticonerServer};
 use identiconpro::{IdenticonReply, IdenticonRequest};
 
 pub mod identiconpro {
-    tonic::include_proto!("identicon");
+    tonic::include_proto!("server");
 }
 
 mod identicon;
@@ -25,7 +25,7 @@ impl Identiconer for MyIdenticoner {
             Err(e) => e.to_string(),
         };
 
-        let res = IdenticonReply{ path };
+        let res = IdenticonReply { path };
 
         Ok(Response::new(res))
     }
