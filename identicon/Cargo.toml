@@ -12,6 +12,7 @@ prost = "0.14"
 tonic-prost = "*"
 tonic-types = "*"
 tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
+postgres = "0.19.13"
 
 [build-dependencies]
 tonic-prost-build = "*"

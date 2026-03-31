@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS identicons(
+  id VARCHAR(255) NOT NULL PRIMARY KEY,
+  username VARCHAR(50) NOT NULL,
+  file_path VARCHAR(1000) NOT NULL,
+  created_at Date NOT NULL,
+);
