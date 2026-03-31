@@ -1,4 +1,6 @@
+use tonic::Code;
 use tonic::{Request, Response, Status, transport::Server};
+use tonic_types::{ErrorDetails, StatusExt};
 
 use identiconpro::identiconer_server::{Identiconer, IdenticonerServer};
 use identiconpro::{IdenticonReply, IdenticonRequest};
@@ -20,15 +22,30 @@ impl Identiconer for MyIdenticoner {
     ) -> Result<Response<IdenticonReply>, Status> {
         println!("request: {:?}", request);
 
-        let path = match identicon::run(&request.get_ref().username) {
-            Ok(_) => "good".to_string(),
-            Err(e) => e.to_string(),
+        return match identicon::run(&request.get_ref().username) {
+            Ok(_) => res_success(),
+            Err(_) => res_error(),
         };
-
-        let res = IdenticonReply { path };
-
-        Ok(Response::new(res))
     }
+}
+
+fn res_success() -> Result<Response<IdenticonReply>, Status> {
+    let res = IdenticonReply {
+        path: "good".to_string(),
+    };
+
+    Ok(Response::new(res))
+}
+
+fn res_error() -> Result<Response<IdenticonReply>, Status> {
+    let mut err_details = ErrorDetails::new();
+    err_details.add_bad_request_violation("image", "cannot be created");
+    err_details.add_bad_request_violation("foo", "foo value");
+    err_details.set_localized_message("en-US", "message for the user");
+
+    let status = Status::with_error_details(Code::InvalidArgument, "error grpc", err_details);
+
+    Err(status)
 }
 
 #[tokio::main]
