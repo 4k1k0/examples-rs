@@ -1,57 +1,15 @@
-use tonic::Code;
-use tonic::{Request, Response, Status, transport::Server};
-use tonic_types::{ErrorDetails, StatusExt};
+pub mod identicon;
+mod protocol;
 
-use identiconpro::identiconer_server::{Identiconer, IdenticonerServer};
-use identiconpro::{IdenticonReply, IdenticonRequest};
-
-pub mod identiconpro {
-    tonic::include_proto!("server");
-}
-
-mod identicon;
-
-#[derive(Debug, Default)]
-pub struct MyIdenticoner {}
-
-#[tonic::async_trait]
-impl Identiconer for MyIdenticoner {
-    async fn create(
-        &self,
-        request: Request<IdenticonRequest>,
-    ) -> Result<Response<IdenticonReply>, Status> {
-        println!("request: {:?}", request);
-
-        return match identicon::run(&request.get_ref().username) {
-            Ok(_) => res_success(),
-            Err(_) => res_error(),
-        };
-    }
-}
-
-fn res_success() -> Result<Response<IdenticonReply>, Status> {
-    let res = IdenticonReply {
-        path: "good".to_string(),
-    };
-
-    Ok(Response::new(res))
-}
-
-fn res_error() -> Result<Response<IdenticonReply>, Status> {
-    let mut err_details = ErrorDetails::new();
-    err_details.add_bad_request_violation("image", "cannot be created");
-    err_details.add_bad_request_violation("foo", "foo value");
-    err_details.set_localized_message("en-US", "message for the user");
-
-    let status = Status::with_error_details(Code::InvalidArgument, "error grpc", err_details);
-
-    Err(status)
-}
+use protocol::grpc::identiconpro::identiconer_server::IdenticonerServer;
+use tonic::transport::Server;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = "[::1]:50051".parse()?;
-    let identi = MyIdenticoner::default();
+    let identi = protocol::grpc::MyIdenticoner::default();
+
+    protocol::rest::foo();
 
     Server::builder()
         .add_service(IdenticonerServer::new(identi))
